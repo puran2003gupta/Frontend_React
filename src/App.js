@@ -1,28 +1,26 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import axios from "axios";
-
 const CourseForm = () => {
   const [courseId, setCourseId] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
+  const [success, setSuccess] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
-    const course = {
+    console.log({ courseId, title, description });
+    
+     // Call the REST API
+     axios.post('http://localhost:2020/api', {
       courseId,
       title,
       description,
-    };
-    axios
-      .post("/courses", course)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    }).then(response => {
+      console.log(response);
+      setSuccess(true);
+    });
   };
 
+    
   return (
     <div style={{ textAlign: "center", margin: "0 auto" }}>
       <form onSubmit={handleSubmit}>
@@ -54,6 +52,7 @@ const CourseForm = () => {
           />
         </div>
         <button type="submit">Submit</button>
+        {success && <p style={{ color: "green" }}>Course created successfully!</p>}
       </form>
     </div>
   );
